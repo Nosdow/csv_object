@@ -1,0 +1,7 @@
+require 'pry'
+require 'csv'
+
+def show_csv
+    p Dir['**/*.csv']   
+end
+
