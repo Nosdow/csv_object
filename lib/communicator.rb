@@ -1,4 +1,23 @@
 require 'csv'
 require 'pry'
 
-puts 'hello'
+class Communicator
+
+  def self.welcome
+
+    puts "Bonjour"
+
+    puts "Voici la liste des csv"
+    
+  end
+  
+  
+end
+
+
+
+
+
+
+
+
