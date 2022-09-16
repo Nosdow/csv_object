@@ -12,11 +12,12 @@ class CsvFinder
     def perform
         folder_content #array
         choose_file
-        get_column_names
-        select_column
-        choose_col
-        column_for_csv
-        write_to_csv
+        # get_headers
+        show_columns
+        choose_headers_and_col
+        chosen_headers
+        # # column_for_csv
+        # write_to_csv
     end
     
     private
@@ -35,51 +36,61 @@ class CsvFinder
         @chosen_file = gets.chomp.to_i
         @folder[@chosen_file] 
         @file_dir = @folder[@chosen_file]
+
     end
 
-    def get_column_names
-        @column_names = []
-        @column_csv = CSV.parse(File.read(@file_dir), headers: true)
-        @column_names << @column_csv.headers
-        @column_names = @column_names.flatten
-        
-    end
+    # def get_headers
+    #     @headers = CSV.foreach(@file_dir).first
+    # end
 
-    def select_column
+    def show_columns
         @count_col = 0
         puts "Voici les colonnes saisissez-celle que vous souhaitez extraire"
-        for @col_index in @column_names
+        for @col_index in @headers
         puts "#{@count_col} #{@col_index}" 
         @count_col+=1
         end
     end
-
-
-
-    def choose_col
-        @choice_col = gets.split(",")
-        @choice_col = @choice_col.map{|intgr|intgr.to_i}
-        @choice_col.each do |col_selection|
-        @selected_col = @column_csv.by_col[col_selection]
-        end
-    end
-
-    def column_for_csv
-        @choice_col.map do |intgr_col|
-        @column_names[intgr_col.to_i]
-        end
-    end 
-    def write_to_csv
-       
-        CSV.open("db2/test.csv", 'a+', headers: true, col_sep: "\n") do |csv|
-            csv << column_for_csv
-        csv << @selected_col
-       
-         end
+    
+    def choose_headers_and_col #colone en intgr à envoyer dans le write, le header doit suivre
+        @csv = CSV.parse(File.read(@file_dir), headers: true)
+        @choice_col = gets.split #est un array
+        @choice_col.each do |col_selection| #devient un string
+            @col_selection = col_selection.to_i
+            @selected_col = @csv.by_col[col_selection]
             
-    end    
-        
-        
-     
+        end
+        #p @choice_col.map{|sr| sr.map(&:to_i)}
+    end
+    
+    def headers
+        @headers = []
+        @origin_headers = CSV.foreach(@file_dir).first
+        @headers << @origin_headers
+        puts @headers
+      end
 
+
+
+#     def column_for_csv
+#         @ary_col = []
+#         @choice_col.each do |intgr_col|
+#             @ary_col << intgr_col
+# 
+#             @headers = @headers[intgr_col.to_i]
+#         end
+# 
+#     end 
+#     
+#     def write_to_csv
+#         CSV.open("db2/test.csv", 'a+', headers: true) do |csv|
+#             
+#           
+#         end
+#           
+#              
+#         
+#         
+# 
+#     end    
 end
